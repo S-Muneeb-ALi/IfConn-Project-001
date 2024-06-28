@@ -14,7 +14,7 @@ import {
   Select,
   Upload,
 } from 'antd';
-import { template } from '@/data/issues';
+import  template  from '@/data/MarkdownTemplate';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
@@ -60,14 +60,16 @@ export default function AddPage({ }: AddProps) {
             text-3xl	
             underline 
             underline-offset-8
-          decoration-sky-500'
+          decoration-sky-500
+            mb-20'
+            
             >
 
               ISSUE FORM
 
             </h1>
             <Row gutter={20} className='text-2xl' >
-              <Col xs={24}>
+              <Col xs={24} md={8}>
                 <Form.Item label="Priority"
                   name="priority"
                   rules={[{
@@ -109,7 +111,7 @@ export default function AddPage({ }: AddProps) {
                   }]}>
                   <DatePicker
                     style={{ width: "100%" }}
-                    format="DD MMM YYYY"
+                    format="DD / MMM / YYYY"
                   />
                 </Form.Item>
               </Col>
@@ -120,38 +122,42 @@ export default function AddPage({ }: AddProps) {
                   rules={[{
                     required: true
                   }]}>
-                  <TextArea rows={12} onChange={x => setDescription(x.target.value)} />
+                  <TextArea rows={8} onChange={x => setDescription(x.target.value)} />
                 </Form.Item>
               </Col>
 
-              <Col xs={24}>
-                <Form.Item label="Upload" getValueFromEvent={normFile}>
+              <Col xs={24} md={24} className='mt-20' >
+                <Form.Item label="" getValueFromEvent={normFile}>
 
-                  <p className='text-lg'>Please provide picture in PNG , JPG or JPEG format.</p>
-                  <Upload listType="picture-card">
+                  <p className='text-lg mb-5'>Please provide picture in PNG , JPG or JPEG format.</p>
+
+                  <Upload listType="picture-card" multiple>
                     <button style={{ border: 0, background: 'none' }} type="button">
                       <PlusOutlined />
                       <div style={{ marginTop: 8 }}>ScreenShot</div>
                     </button>
                   </Upload>
+
                 </Form.Item>
               </Col>
 
             </Row>
 
             <Form.Item>
-              <Button className='mt-10' type='primary' htmlType='submit'>Submit</Button>
+              <Button className='mt-5' type='primary' htmlType='submit'>Submit</Button>
             </Form.Item>
 
           </Form>
         </Col>
 
-        <Col xs={24} md={8}>
+        <Col xs={24} md={8} >
+        <Card>
           <Markdown
             remarkPlugins={[remarkGfm]}
-            className={"markdown-viewer"}>
+            className={"markdown-viewer max-w-20"}>
             {description}
           </Markdown>
+          </Card>
         </Col>
       </Row>
     </Card>

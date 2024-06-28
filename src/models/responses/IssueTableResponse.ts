@@ -1,13 +1,10 @@
-export default interface IssueResponse {
+export default interface IssueTableResponse {
   id: number;
   name: string;
   department: number;
   trackingIssue: string;
-  assignTo: number[];
+  assignTo: string[];
   priority: number;
   status: number;
   createdAt: string;
-  comment: string;
-  description: string;
-  images: string[];
 }

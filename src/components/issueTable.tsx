@@ -1,15 +1,20 @@
 
 import type { TableColumnsType } from 'antd';
 import { Badge, Button, Col, Row, Table, Card, Tag } from 'antd';
-import IssueResponse from '@/models/responses/IssueResponse';
-import IssuesData from '@/data/issues';
+
+import IssueTableResponse from '@/models/responses/IssueTableResponse';
+import IssuesTableData from '@/data/IssuesTableData';
+
 import AssignedUserView from '@/components/AssignedUser/AssignedUserView';
 
-export default function IssueTable(){
+import { Priorities, Department } from '@/data/Data';
+import Status from '@/data/Status';
 
-  const columns: TableColumnsType<IssueResponse> = [
+export default function IssueTable() {
+
+  const columns: TableColumnsType<IssueTableResponse> = [
     {
-      title: 'Email',
+      title: 'NAME',
       dataIndex: 'name',
       key: 'name',
     },
@@ -18,6 +23,14 @@ export default function IssueTable(){
       title: 'DEPARTMENT',
       dataIndex: 'department',
       key: 'department',
+      render(text, item) {
+        return (
+
+          <Tag color="hsl(270, 100%, 60%)">
+            {Department.find(x => x.id == item.department)!.name}
+          </Tag>
+        );
+      }
     },
 
     {
@@ -46,10 +59,10 @@ export default function IssueTable(){
       key: 'priority',
       render: (text, item) => {
         return (
-          
-          <Tag color={item.priority === 'High' ? 'red' : 'low' ? 'green' : 'medium' ? 'blue' : 'cyan' } >
-           {item.priority} 
-            </Tag>
+
+          <Tag color={item.priority === 1 ? 'green' : 2 ? 'orange' : 3 ? ' red' : 'cyan'} >
+            {Priorities.find(x => x.id == item.priority)!.name}
+          </Tag>
         );
       },
     },
@@ -58,23 +71,29 @@ export default function IssueTable(){
       dataIndex: 'status',
       key: 'status',
       render: (text, item) => {
-        const badgeColor = (status: string) => {
+        const badgeColor = (status: number) => {
           switch (status) {
-            case 'Found':
-              return 'error';
-            case 'In-Progress':
+            case 1:
               return 'warning';
-            case 'Completed':
+            case 2:
+              return 'processing';
+            case 3:
+              return 'success';
+            case 4:
+              return 'error';
+            case 5:
+              return 'warning';
+            case 6:
               return 'success';
             default:
               return 'default';
           }
         };
-    
+
         return (
           <Badge
-            status={badgeColor(item.status[0])} 
-            text={text} 
+            status={badgeColor(item.status)}
+            text={Status.find(x => x.id == item.status)!.name}
           />
         );
       },
@@ -89,14 +108,14 @@ export default function IssueTable(){
   ];
 
   return (
-    
+
     <Row className='xs:grid-cols-2 lg:grid-cols-4'>
-       <Col xs={24} lg={24}>
-        <Card className=' '>
+      <Col xs={24} lg={24}>
+        <Card title="ISSUE LIST">
           <Table
             className="pl-3"
             columns={columns}
-            dataSource={IssuesData}
+            dataSource={IssuesTableData}
             scroll={{ x: 'calc(600px + 50%)', y: 1000 }}
           />
         </Card>

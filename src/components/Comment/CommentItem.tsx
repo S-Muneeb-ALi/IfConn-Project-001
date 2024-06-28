@@ -23,22 +23,24 @@ export default function CommentItem({id, comment, avatar, time, isOwn, files }: 
 
         {files && files.length > 0 && (
           <List
-            className=" border border-slate-300 rounded-md "
-            grid={{ column: 3 }}
+            className=" "
+            grid={{ column: 3, xs: 1 , sm: 1 }}
             size="small"
             dataSource={files}
             key={id}
 
             renderItem={(file: string) => (
 
-              <List.Item key={file} >
+              <List.Item key={file} 
+              className="border border-slate-800 rounded-md bg-slate-300 w-32 h-24 ">
 
                 <Image
                   src={file}
-                  width={200}
-                  height={100}
                   alt="really"
-                  preview={true} />
+                  
+                 style={{ maxWidth: "90%", maxHeight: "80dvh", marginTop: "20px"}} 
+                  
+                  />
 
               </List.Item>
 

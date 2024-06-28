@@ -1,16 +1,18 @@
 'use client'
 
 import React, { useState } from 'react';
-import { Card, Col, Row, Image } from 'antd';
-import IssuesData from "@/data/issues";
-import IssueDescription from '@/components/issue/IssueDescription';
-import MarkdownViewer from '@/components/MarkdownViewer';
-import CommentsView from '@/components/Comment/CommentsView';
+import { Card, Col, Row, Image, Result, Button } from 'antd';
 
 import CommentResponse from '@/models/responses/CommentResponse';
 
 import CommentsData from '@/data/comments';
+import IssuesData from "@/data/IssuesData";
+
+import IssueDescription from '@/components/issue/IssueDescription';
+import MarkdownViewer from '@/components/MarkdownViewer';
+import CommentsView from '@/components/Comment/CommentsView';
 import CommentsAdd from '@/components/Comment/CommentsAdd';
+
 
 interface DetailPageParams {
   id: string;
@@ -22,24 +24,28 @@ export interface DetailPageProps {
 
 export default function DetailPage({ params }: DetailPageProps) {
 
-  const item = IssuesData.find(x => x.id.toString() === params.id)!;
+  const item = IssuesData.find(x => x.id.toString() === params.id)!
+    if (!item) {
+      return (
+        <Result
+          status="404"
+          title="404"
+          subTitle="Sorry, the page you visited does not exist."
+          extra={<Button type="primary" onClick={() => window.history.back()}>Back to Issue List</Button>}
+        />
+      );
+    };
+    
   const issueComments = CommentsData.filter(x => x.issueId.toString() === params.id)!;
 
   const [visible, setVisible] = useState(false);
-
-  const [isAssigningUser, setIsAssigningUser] = useState(false);
-  const [assignedUsers, setAssignedUsers] = useState<number[]>([]);
-
   const [comments, setComments] = useState<CommentResponse[]>(issueComments);
+  const [currentItem, setCurrentItem] = useState(item);
 
   return (
-
     <Row gutter={[20, 20]}>
-
       <Col xs={24} md={14}>
-
         <Card type="inner">
-
           <div>
 
             <h1 className='pb-20 font-bold text-xl'>
@@ -62,22 +68,15 @@ export default function DetailPage({ params }: DetailPageProps) {
             </div>
 
           </div>
-
         </Card>
-
       </Col>
 
 
       <Col xs={24} md={10}>
-
         <IssueDescription
-          item={item}
-          assignedUsers={assignedUsers}
-          setAssignedUsers={setAssignedUsers}
-          isAssigningUser={isAssigningUser}
-          setIsAssigningUser={setIsAssigningUser}
+          item={currentItem}
+          onChange={item => setCurrentItem(item)}
         />
-
       </Col>
 
       <Col xs={24} md={14}>

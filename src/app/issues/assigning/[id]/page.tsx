@@ -2,7 +2,7 @@
 import React from 'react';
 
 
-import IssuesData from "@/data/issues";
+import IssuesData from "@/data/IssuesData";
 
 import { Card, List, Skeleton } from 'antd';
 import {

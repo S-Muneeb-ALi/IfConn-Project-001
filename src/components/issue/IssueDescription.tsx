@@ -1,81 +1,158 @@
-import Users from "@/data/users";
-import { faAddressCard, faTicket, faClipboardQuestion, faCalendar, faChartSimple, faClipboardList } from "@fortawesome/free-solid-svg-icons";
+import React, { useState } from 'react';
+
+
+import { faAddressCard, faTicket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Card } from "antd";
-import AssignedUserSelect from "../AssignedUser/AssignedUserSelect";
-import AssignedUserView from "../AssignedUser/AssignedUserView";
-import IconText from "../IconText";
-import SectionTitle from "../SectionTitle";
-import IssueResponse from "@/models/responses/IssueResponse";
 import { faCircleUser } from "@fortawesome/free-regular-svg-icons";
 import { faSignal } from "@fortawesome/free-solid-svg-icons/faSignal";
+import { Card, Select } from "antd";
+
+import AssignedUserSelect from "../AssignedUser/AssignedUserSelect";
+import AssignedUserView from "../AssignedUser/AssignedUserView";
+
+import SectionTitle from "../SectionTitle";
+import IconText from "../IconText";
+
+import IssueResponse from '@/models/responses/IssueResponse';
+
+import { Users, Statuses, Priorities, Department } from "@/data/Data";
 
 export interface IssueDescriptionProps {
   item: IssueResponse;
-  isAssigningUser: boolean;
-  setIsAssigningUser: (value: boolean) => void;
-
-  assignedUsers: number[];
-  setAssignedUsers: (users: number[]) => void;
+  onChange?: (item: IssueResponse) => void;
 }
 
-export default function IssueDescription({ item: { trackingIssue, department, priority, createdAt,name,status }, isAssigningUser, setIsAssigningUser, assignedUsers, setAssignedUsers }: IssueDescriptionProps) {
+
+
+export default function IssueDescription({ item, onChange }: IssueDescriptionProps) {
+  const { trackingIssue, department, priority, assignTo, name, status } = item;
+
+  const [showDepartmentChange, setDepartmentChange] = React.useState(false);
+
+  const [showProritychange, setShowProrityChange] = React.useState(false);
+
+  const [showStatusChange, setShowStatusChange] = React.useState(false);
+
+  const [isAssigningUser, setIsAssigningUser] = useState(false);
+
   return (
     <Card className=' text-left'>
       <h1 className=' mt-10 pb-10 font-bold text-2xl text-center border-b-4 border-slate-900'>Issue Description</h1>
       <div className=' text-xl mt-20 grid xs:grid-cols-1 md:grid-cols-2 gap-10'>
 
-      <section>
+        <section>
           <SectionTitle title="Name" />
           <IconText
-            icon={<FontAwesomeIcon icon={faCircleUser} style={{color:'#f56a00'}}/>}
+            icon={<FontAwesomeIcon icon={faCircleUser} style={{ color: '#f56a00' }} />}
             text={name ?? "NA"}
           />
         </section>
 
         <section>
           <SectionTitle title="Department" />
-          <IconText
-            icon={<FontAwesomeIcon icon={faAddressCard} style={{color:'#f56a00'}}/>}
-            text={department ?? "NA"}
-          />
+          {showDepartmentChange ? (
+          <Select
+          style={{ width: '100%' }}
+          value={department}
+          className="grow"
+          onChange={departmentId => {
+            setDepartmentChange(false);
+            if (!onChange) {
+              return;
+            }
+            const newItem = {
+              ...item,
+              department: departmentId,
+            }
+            onChange(newItem);
+          }}
+          options={Department.map(x => ({ value: x.id, label: x.name }))}
+
+          /> ) : (
+            <IconText
+              icon={<FontAwesomeIcon icon={faAddressCard} style={{ color: '#f56a00' }} />}
+              text={Department.find(x => x.id === department)!.name}
+              onClick={() => setDepartmentChange(true)}
+              style={{ cursor: "pointer" }}
+            />
+          )
+       }
         </section>
 
         <section>
           <SectionTitle title="Tracking Code" />
           <IconText
-            icon={<FontAwesomeIcon icon={faTicket} style={{color:'#f56a00'}}/>}
+            icon={<FontAwesomeIcon icon={faTicket} style={{ color: '#f56a00' }} />}
             text={trackingIssue ?? "NA"}
           />
         </section>
 
         <section>
           <SectionTitle title="Priority" />
-          <IconText
-            icon={<FontAwesomeIcon icon={faSignal} style={{color:'#f56a00'}}/>}
-            text={priority ?? "NA"}
-          />
-        </section>
-        <section>
-          <SectionTitle title="Status" />
-          <IconText
-            icon={<FontAwesomeIcon icon={faClipboardList} style={{color:'#f56a00'}}/>}
-            text={status[0] ?? "NA"}
-          />
+
+          {showProritychange ? (
+            <Select
+              style={{ width: '100%' }}
+              value={priority}
+              className="grow"
+              onChange={priorityId => {
+                setShowProrityChange(false);
+                if (!onChange) {
+                  return;
+                }
+                const newItem = {
+                  ...item,
+                  priority: priorityId,
+                }
+                onChange(newItem);
+              }}
+              options={Priorities.map(x => ({ value: x.id, label: x.name }))}
+            />) : (
+            <IconText icon={<FontAwesomeIcon icon={faSignal} style={{ color: '#f56a00' }} />}
+              text={Priorities.find(x => x.id === priority)!.name}
+              onClick={() => setShowProrityChange(true)}
+              style={{ cursor: "pointer" }}
+            />
+          )}
         </section>
 
         <section>
-          <SectionTitle title="Created At" />
-          <IconText
-            icon={<FontAwesomeIcon icon={faCalendar} style={{color:'#f56a00'}}/>}
-            text={createdAt ?? "NA"}
-          />
+          <SectionTitle title="Status" />
+
+
+          {showStatusChange ? (
+            <Select
+              style={{ width: '100%' }}
+              value={status}
+              onChange={statusId => {
+                setShowStatusChange(false);
+                if (!onChange) {
+                  return;
+                }
+
+                const newItem = {
+                  ...item,
+                  status: statusId,
+                }
+                onChange(newItem);
+              }}
+              className="grow"
+              options={Statuses.map(x => ({ value: x.id, label: x.name }))}
+            />
+          ) : (
+            <IconText
+              icon={<FontAwesomeIcon icon={faSignal} style={{ color: '#f56a00' }} />}
+              text={Statuses.find(x => x.id === status)!.name}
+              onClick={() => setShowStatusChange(true)}
+              style={{ cursor: "pointer" }}
+            />
+          )}
         </section>
-        
+
 
       </div>
       <div className=' text-xl mt-20 grid xs:grid-cols-1 md:grid-cols-2 gap-10'>
-      <section className="assigned-users col-span-2">
+        <section className="assigned-users col-span-2">
           <SectionTitle
             title="Assigned Users"
             showButton={!isAssigningUser}
@@ -85,17 +162,25 @@ export default function IssueDescription({ item: { trackingIssue, department, pr
           {isAssigningUser ? (
             <AssignedUserSelect
               users={Users}
-              values={assignedUsers}
+              values={assignTo}
               onChange={users => {
-                setAssignedUsers(users.map(x => x.id));
                 setIsAssigningUser(false);
+                if (!onChange) {
+                  return;
+                }
+
+                const newItem = {
+                  ...item,
+                  assignTo: users.map(x => x.id),
+                }
+                onChange(newItem);
               }}
             />
-          ) : 
-          <AssignedUserView users={assignedUsers.map(id => Users.find(u => u.id === id)!.name)} />
+          ) :
+            <AssignedUserView users={Users.filter(x => assignTo.includes(x.id)).map(x => x.name)} />
           }
         </section>
-        </div>
+      </div>
 
 
 

@@ -1,4 +1,4 @@
-export default interface UserDataProps {
+export default interface UserResponse {
   id: number;
   name: string;
 }
