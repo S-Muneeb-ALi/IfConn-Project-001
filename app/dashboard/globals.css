@@ -1,0 +1,136 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+.markdown-viewer {
+  all: revert;
+  * {
+    all: revert;
+  }
+
+  table {
+    @apply w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400;
+    thead {
+      @apply text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400;
+
+      tr {
+        th {
+          @apply px-6 py-3;
+        }
+      }
+    }
+    tbody {
+      tr{
+        @apply bg-white border-b dark:bg-gray-800 dark:border-gray-700;
+
+        td {
+          @apply px-6 py-4;
+        }
+
+      }
+      
+    }
+  }
+}
+
+.input::placeholder .input {
+  color: white;
+  
+ 
+}
+
+
+.comment {
+  margin: 20px 15px;
+  display: flex;
+  flex-direction: column;
+
+  &:not(&.comment--own) {
+    --accent-color: 243.35deg 98.77% 0%;
+
+    .comment__avatar {
+      left: -30px;
+    }
+  }
+
+  &.comment--own {
+    align-items: flex-end;
+    --accent-color: 243.35deg 98.77% 68.04%;
+
+    .comment__content {
+      background-color: hsl(var(--accent-color));
+      color: #fff;
+    }
+
+    .comment__avatar {
+      right: -30px;
+    }
+  }
+
+  .comment__content {
+    background-color: #f5f6fa;
+    color: #51647c;
+    padding: 15px 30px;
+    border-radius: 20px;
+    max-width: 70%;
+    box-shadow: 0 5px 10px hsl(var(--accent-color) / 60% );
+  }
+
+  .comment__footer-flex {
+    position: relative;
+    padding: 0 30px;
+  }
+
+  .comment__avatar {
+    background: white;
+    padding: 8px;
+    box-sizing: content-box;
+    position: absolute;
+    top: -30px;
+  }
+
+  .comment__time {
+    color: #79838d;
+    font-size: 0.8rem;
+    margin: 0 10px;
+  }
+
+  
+}
+
+.input--dark {
+  background: transparent !important;
+}
+
+.input--dark input {
+  color: white;
+}
+.input--dark input::placeholder {
+  color: white !important;
+}
+
+
+.input--bordered {
+  border: none !important;
+  border-bottom: 1px solid black !important;
+}
+
+.input--dark.input--bordered {
+  border-bottom-color: white !important;
+}
+
+.--dark1 {
+  color:hsl(330, 56%, 33%) ;
+}
+
+
+.--dark2 {
+  color:hsl(241, 46%, 39%) ;
+}
