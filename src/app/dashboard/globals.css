@@ -126,15 +126,11 @@
   border-bottom-color: white !important;
 }
 
-.dark1 {
+.--dark1 {
   color:hsl(330, 56%, 33%) ;
 }
 
 
-.dark2 {
+.--dark2 {
   color:hsl(241, 46%, 39%) ;
-}
-
-.main--page {
-  color: white;
 }

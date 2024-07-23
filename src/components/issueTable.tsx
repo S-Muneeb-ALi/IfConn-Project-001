@@ -49,23 +49,27 @@ export default function IssueTable() {
     },
 
     {
-      title: 'ISSUE DATE',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-    },
-    {
       title: 'PRIORITY',
       dataIndex: 'priority',
       key: 'priority',
       render: (text, item) => {
-        return (
+        const TagColor = (priority: number) => {
+          switch (priority) {
+            case 1:
+              return 'green';
+            case 2:
+              return 'gold';
+            case 3:
+              return 'error';
+          }
+        };
 
-          <Tag color={item.priority === 1 ? 'green' : 2 ? 'orange' : 3 ? ' red' : 'cyan'} >
-            {Priorities.find(x => x.id == item.priority)!.name}
-          </Tag>
+        return (
+          <Tag color={TagColor(item.priority)} > {Priorities.find(x => x.id == item.priority)!.name} </Tag>
         );
       },
     },
+
     {
       title: 'STATUS',
       dataIndex: 'status',
@@ -102,7 +106,7 @@ export default function IssueTable() {
       title: 'More Details',
       key: 'operation',
       render: (text, item) => (
-        <Button type="link" href={`/issues/detail/${item.id}`}>Detail</Button>
+        <Button type="link" href={`/dashboard/issues/detail/${item.id}`}>Detail</Button>
       ),
     }
   ];
@@ -111,7 +115,7 @@ export default function IssueTable() {
 
     <Row className='xs:grid-cols-2 lg:grid-cols-4'>
       <Col xs={24} lg={24}>
-        <Card title="ISSUE LIST">
+        <Card >
           <Table
             className="pl-3"
             columns={columns}
